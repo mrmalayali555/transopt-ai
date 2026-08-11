@@ -194,10 +194,7 @@ export const NAV_ITEMS = [
   { id: 'simulation', label: 'Digital Twin', icon: 'Box', href: '/simulation' },
   { id: 'crisis', label: 'Crisis Mode', icon: 'AlertTriangle', href: '/crisis' },
   { id: 'routes', label: 'Routes', icon: 'Route', href: '/routes' },
-  { id: 'fleet-health', label: 'Fleet Health', icon: 'Heart', href: '/fleet-health' },
+  { id: 'maintenance', label: 'Fleet Health', icon: 'Heart', href: '/maintenance' },
   { id: 'passenger', label: 'Passenger View', icon: 'Users', href: '/passenger' },
   { id: 'assistant', label: 'AI Assistant', icon: 'MessageSquare', href: '/assistant' },
-  { id: 'reports', label: 'Reports', icon: 'FileText', href: '/reports' },
-  { id: 'data', label: 'Data', icon: 'Database', href: '/data' },
-  { id: 'settings', label: 'Settings', icon: 'Settings', href: '/settings' },
 ];

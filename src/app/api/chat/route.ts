@@ -26,14 +26,10 @@ ${context}`;
           { role: "system", content: systemPrompt },
           { role: "user", content: message }
         ],
-        temperature: 0.7, // Lowered slightly from 1 for more analytical responses
+        temperature: 0.7,
         top_p: 0.95,
         max_tokens: 1024,
         stream: true,
-        extra_body: {
-          chat_template_kwargs: { enable_thinking: true },
-          reasoning_budget: 1024,
-        }
       }),
     });
 
