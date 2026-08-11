@@ -25,6 +25,7 @@ export default function FleetPage() {
                   id: 'prototype-strategy',
                   name: 'Reassign Ghost Bus to Overcrowded Route',
                   description: 'Moves underutilized bus from a bunched route to a high-demand route.',
+                  type: 'reassign' as const,
                   score: 98,
                   isRecommended: true,
                   reasoning: [
@@ -37,9 +38,20 @@ export default function FleetPage() {
                     waitingTimeChange: -12.5,
                     costChange: -850,
                     occupancyAfter: 0.75,
+                    overallScore: 98,
+                    overcrowdedRoutes: -1,
+                    missedConnections: 0,
+                    avgDelay: -2,
+                    fleetUtilization: 0.88,
                   },
                   confidence: 0.99,
-                  actions: []
+                  changes: [{
+                    busId: 'bus-104',
+                    fromRouteId: 'route-12',
+                    toRouteId: 'route-4',
+                    action: 'reassign',
+                    detail: 'Moved from Route 12 to Route 4 due to severe crowding.'
+                  }]
                 };
                 useAppStore.setState(state => ({
                   strategies: [prototypeStrategy, ...state.strategies.map(s => ({...s, isRecommended: false}))]
