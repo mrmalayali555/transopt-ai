@@ -19,6 +19,37 @@ export default function FleetPage() {
           </div>
           <div className="flex items-center gap-3">
             <button
+              onClick={() => {
+                // College Jury Prototype Injector
+                const prototypeStrategy = {
+                  id: 'prototype-strategy',
+                  name: 'Reassign Ghost Bus to Overcrowded Route',
+                  description: 'Moves underutilized bus from a bunched route to a high-demand route.',
+                  score: 98,
+                  isRecommended: true,
+                  reasoning: [
+                    'Detected Route 12 (Kozhikode-Local) is over-serviced with buses 4 mins apart and only 15% occupancy.',
+                    'Detected Route 4 (Kozhikode-Kannur) is critically overcrowded (95% occupancy).',
+                    'Reassigning Bus-104 from Route 12 to Route 4.',
+                    'Saves ₹850 in redundant operating costs while relieving 45 standing passengers.'
+                  ],
+                  metrics: {
+                    waitingTimeChange: -12.5,
+                    costChange: -850,
+                    occupancyAfter: 0.75,
+                  },
+                  confidence: 0.99,
+                  actions: []
+                };
+                useAppStore.setState(state => ({
+                  strategies: [prototypeStrategy, ...state.strategies.map(s => ({...s, isRecommended: false}))]
+                }));
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-semibold hover:shadow-lg hover:shadow-emerald-500/20 transition-all border border-emerald-400"
+            >
+              🎓 Inject Jury Prototype
+            </button>
+            <button
               onClick={takeSnapshot}
               className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 text-sm font-medium hover:bg-gray-700 transition-all"
             >
