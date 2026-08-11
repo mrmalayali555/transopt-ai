@@ -207,6 +207,42 @@ export function simulationTick(
   // 3. Generate AI recommendations
   const recommendations: Recommendation[] = [];
 
+  // Check for Underutilization / Ghost Buses (High frequency, low occupancy)
+  routes.forEach(route => {
+    const routeBuses = activeBuses.filter(b => b.assignedRouteId === route.id);
+    if (routeBuses.length >= 2) {
+      const avgOcc = routeBuses.reduce((sum, b) => sum + (b.currentPassengers / Math.max(1, b.capacity)), 0) / routeBuses.length;
+      
+      // Check if buses are close to each other (bunching or < 10 min gap proxy by stop index difference)
+      let hasLowGap = false;
+      const sortedBuses = [...routeBuses].sort((a, b) => a.currentStopIndex - b.currentStopIndex);
+      for (let i = 1; i < sortedBuses.length; i++) {
+        if (Math.abs(sortedBuses[i].currentStopIndex - sortedBuses[i - 1].currentStopIndex) <= 2) {
+          hasLowGap = true;
+          break;
+        }
+      }
+
+      // If buses are close and mostly empty (< 30% full)
+      if (hasLowGap && avgOcc < 0.3) {
+        recommendations.push({
+          id: generateId('rec'),
+          timestamp: state.currentTime,
+          severity: 'warning',
+          category: 'optimization',
+          title: `Over-servicing detected on ${route.shortName}`,
+          reason: `Buses are running closely together with only ${Math.round(avgOcc * 100)}% tickets sold/occupancy`,
+          dataUsed: ['Live vehicle location', 'Ticketing/Occupancy data', 'Headway spacing'],
+          expectedImpact: 'Reduce operating cost and relieve overcrowding elsewhere',
+          confidence: 0.94,
+          recommendedAction: 'Re-schedule empty bus to a highly crowded route',
+          strategies: [],
+          status: 'pending',
+        });
+      }
+    }
+  });
+
   // Check for overcrowding
   if (overcrowded > 2) {
     const overcrowdedBus = activeBuses.find(b => b.currentPassengers > b.capacity * 0.90);
